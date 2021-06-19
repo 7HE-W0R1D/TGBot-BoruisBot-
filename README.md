@@ -8,10 +8,10 @@ Start messaging [directly](t.me/boruisbot) or search @BoruisBot to start using!
 
 ## Available Commands
 
-* /translate  translate one English word to Chinese
-* /yiyan      one sentence for inspration
-* /weathernow check weather, accepts Chinese & English
-* /comic      search & read some comics! type "/comic xxx" to start
+* ```/translate``` &emsp; translate one English word to Chinese
+* ```/yiyan``` &emsp; one sentence for inspration
+* ```/weathernow``` &emsp; check weather, accepts Chinese & English
+* ```/comic``` &emsp; search & read some comics! type "/comic xxx" to start
 
 ## Known Issues
 
