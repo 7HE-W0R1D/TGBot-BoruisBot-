@@ -1,12 +1,9 @@
 {
   "timeZone": "Asia/Hong_Kong",
-  "dependencies": {
-    "enabledAdvancedServices": []
-  },
-  "webapp": {
-    "access": "ANYONE_ANONYMOUS",
-    "executeAs": "USER_DEPLOYING"
-  },
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "DEPRECATED_ES5"
+  "runtimeVersion": "DEPRECATED_ES5",
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "ANYONE_ANONYMOUS"
+  }
 }
