@@ -2,7 +2,8 @@ function comicTest() {
   //comic(selfid, "as", 0, 0);
   //echo(selfid, "hi");
   //sendContent(selfid, "/manhua/9740/11879_164585.html?isend=0?current=23?max=24");
-  comicVol(selfid, "/manhua/703");
+  //comicVol(selfid, "/manhua/703");
+  //sendContent(selfid, "/manhua/703/715_7653.html" + "?isend=" + "0" + "?current=" + "2" + "?max=" + "18");
 }
 
 function comic(senderId, text, cmdstat, cmdlen) {
@@ -18,10 +19,10 @@ function comic(senderId, text, cmdstat, cmdlen) {
   doc = XmlService.parse(bodyHtml).getRootElement();
 
   var comicList = cList(doc);
-  Logger.log(comicList);
+  //Logger.log(comicList);
 
   if (comicList.length == 0) {
-    Logger.log("No Comic Found")
+    //Logger.log("No Comic Found")
     echo(senderId, "啊哦，没有找到漫画呢");
   }
   else {
@@ -224,7 +225,7 @@ function comicVol(senderId, callback_data) {
 function getVolKB(volUrlList, volCode, c, messageId, chatId) {
 
   var title;
-  var callBackurl;
+  var callBackurl; //  /manhua/703/715_7653.html
   var prefix = "$";
   var keyBoard = [];
   var miniKB = [];
@@ -379,7 +380,7 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
 }
 
 function quickAllPG(comicCode) {
-  var urlC = orgURL + comicCode; //using orgurl for compatibility with ver20.8.1
+  var urlC = orgURL + comicCode;
   var pageFlag = "_p";
   var currPage = 1;
   var allPG = [];
@@ -392,6 +393,7 @@ function quickAllPG(comicCode) {
     currURL = urlC.substr(0, urlC.length - 5) + pageFlag + currPage + urlC.substr(urlC.length - 5, urlC.length); //update url
     picElement = getElementsByClassName(urlParse(currURL), "img-fluid show-pic");
   }
+  //Logger.log(allPG.length);
   return allPG;
 }
 
@@ -399,10 +401,10 @@ function quickAllPG(comicCode) {
 function sendContent(senderId, comicCode) {
 
   var bakCode = comicCode;
-  var comicCode = comicCode.substring(0, comicCode.lastIndexOf("?isend="));
+  var comicURL = comicCode.substring(0, comicCode.lastIndexOf("?isend="));
   var isEnd = comicCode.substring((comicCode.lastIndexOf("?isend=") + 7), comicCode.indexOf("?current="));
   isEnd = parseInt(isEnd);
-  var pgURL = quickAllPG(comicCode);
+  var pgURL = quickAllPG(comicURL);
 
   var len = pgURL.length;
   var round = (len - (len % 10)) / 10 + Math.ceil((len % 10) / 10); //every group 10 pics, round is how many groups there will be
@@ -478,7 +480,7 @@ function endContent(senderId, comicCode) {
 
   var root = urlParse(orgURL + volCode);
   var vol = getElementsByClassName(root, "sort_div fixed-wd-num");
-  Logger.log(vol);
+  //Logger.log(vol);
   var nextUrl;
   var prevUrl;
 
@@ -490,7 +492,7 @@ function endContent(senderId, comicCode) {
     }
 
     if (volUrl == fullCode && isEnd == 0) {
-      Logger.log(vol);
+      //Logger.log(vol);
       nextUrl = vol[x + 1].getChild("a").getAttribute("href").getValue();
       prevUrl = vol[x - 1].getChild("a").getAttribute("href").getValue();
     }
@@ -605,7 +607,7 @@ function endContent(senderId, comicCode) {
   var finalKB = {
     "inline_keyboard": keyBoard
   }
-  Logger.log(JSON.stringify(finalKB));
+  //Logger.log(JSON.stringify(finalKB));
 
   sendKB(senderId, "本集已读完~", finalKB);
 }
