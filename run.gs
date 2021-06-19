@@ -36,38 +36,41 @@ function doGet(e) {
 
 function doPost(e) {
   var rawData = JSON.parse(e.postData.contents);//Response example in Notebook--Webhook response.
-  var isGroup = false;
   var mute = false;
   var senderId;
 
   if (rawData.message) {
 
-    if (rawData.message.chat.id != rawData.message.from.id) {
-      //group chat!
-      isGroup = true;
-      senderId = rawData.message.chat.id;
-    } else {
-      //private chat
-      senderId = rawData.message.from.id;
-    }
-
-
     var text = rawData.message.text;//what he or she actually said
     var entity = rawData.message.entities[0];
-
-    if (isGroup) {
-      var targetBot = text.substring(text.lastIndexOf("@"), text.length);
-      if (targetBot == "@BoruisBot") {
-        text = text.substring(0, text.lastIndexOf("@"));
-      } else {
-        mute = true;
+    var commandNum = 0;
+    for (var x = 0; x < rawData.message.entities.length; x++) {
+      var entityType = JSON.stringify(rawData.message.entities[x].type);
+      if (entityType == '"bot_command"') {
+        commandNum++;
+      } else if (entityType == '"mention') {
+        //group chat!
+        var mentionLen = rawData.message.entities[x].length;
+        var mentionStat = rawData.message.entities[x].offset;
+        var targetBot = rawData.message.text.substring(mentionStat, mentionStat + mentionLen);
+        if (targetBot == "@BoruisBot") {
+          //update text for groupchat
+          text = rawData.message.text.substring(rawData.message.entities[0].offset, rawData.message.entities[1].offset);
+        } else {
+          //calling others bots, be quiet!
+          mute == true;
+        }
       }
     }
+    senderId = rawData.message.chat.id;
 
-    if (!mute && JSON.stringify(entity.type) == '"bot_command"') {
+    
+    if (!mute && commandNum > 0) {
 
-      if (rawData.message.entities.length > 1) {
+      if (commandNum > 1) {
         echo(senderId, "You send several commands, I will only accept the first one.");
+        //update text for multiple commands
+        text = rawData.message.text.substring(rawData.message.entities[0].offset, rawData.message.entities[1].offset);
       }
 
       var cmdlen = entity.length;
@@ -90,7 +93,6 @@ function doPost(e) {
       else {
         echo(senderId, "Not a valid command.");
       }
-      //echo(senderId, "cmd");
     }
   }
   //
