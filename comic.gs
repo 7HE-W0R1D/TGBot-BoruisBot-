@@ -4,29 +4,10 @@ function comicTest() {
   //sendContent(selfid, "/manhua/9740/11879_164585.html?isend=0?current=23?max=24");
 }
 
-// function startComic(senderId, text, cmdstat, cmdlen) {
-//   //echo(senderId, text);
-//   //echo(senderId, cmdstat);
-//   //echo(senderId, cmdlen);
-//   var textlen = text.length;
-//   //Logger.log(textlen);
-//   var sTitle = text.substring(cmdstat + cmdlen, textlen);
-//   //echo(senderId, sTitle);
-//   comic(senderId, text, cmdstat, cmdlen);
-
-// }
-
 function comic(senderId, text, cmdstat, cmdlen) {
 
-  //var orgurl = "https://www.manhuadb.com/search?q=";
-  //echo(senderId, text);
-  //echo(senderId, cmdstat);
-  //echo(senderId, cmdlen);
   var textlen = text.length;
-  //Logger.log(textlen);
   var sTitle = text.substring(cmdstat + cmdlen, textlen);
-  //echo(senderId, sTitle);
-  //Logger.log(sTitle);
   sTitle = encodeURIComponent(sTitle);
 
   var url = orgURL + "/search?q=" + sTitle;
@@ -50,7 +31,6 @@ function comic(senderId, text, cmdstat, cmdlen) {
 
 
 function cList(doc) {
-  //doc = doc.getRootElement(); //for campatibility with ver20.8.1
   var comicMax = 100; //Limit the max number of comics to search to improve performance
   var result = getElementsByClassName(doc, "row m-0");
 
@@ -58,15 +38,11 @@ function cList(doc) {
     //have valid result! Go on
     var allWrapper = result[1]; //all tags outside all results
     var allResult = [];
-    
+
     while (getElementsByClassName(doc, "btn btn-primary mb-1").length != 0 && allResult.length < comicMax) {
       //get all from page, the go to next page
       allResult = getAllFromPage(allWrapper, "comicbook-index mb-2 mb-sm-0", allResult, comicMax);
       var newURL = getElementsByClassName(doc, "btn btn-primary mb-1")[0].getAttribute("href").getValue();
-      // var html = UrlFetchApp.fetch(orgURL + newURL).getContentText();
-      // doc = Xml.parse(html, true);
-      // var bodyHtml = doc.html.body.toXmlString();
-      // doc = XmlService.parse(bodyHtml).getRootElement();
       doc = urlParse(orgURL + newURL);
       var allWrapper = getElementsByClassName(doc, "row m-0")[1]; //all tags outside all results
     }
@@ -81,7 +57,7 @@ function cList(doc) {
   else {
     return [];
   }
-  
+
 }
 
 function getAllFromPage(doc, target, result, comicMax) {
@@ -110,7 +86,7 @@ function sendComic(senderId, coverList, x, sTitle) {
   var keyBoard = {};
 
   for (; x % 5 != 0 && x < coverList.length; x++) {
-    //Logger.log(x-1);
+    // Logger.log(x-1);
     var title = coverList[x - 1][0];
     title = title.replace(/[\(\)\-=#*>_<~@{}\[\]\\:%!]/gi, "");
     var backData = coverList[x - 1][1];
@@ -121,7 +97,7 @@ function sendComic(senderId, coverList, x, sTitle) {
       coverList[x - 1][2] = cover;
     }
 
-    //Logger.log(title + backData + cover);
+    // Logger.log(title + backData + cover);
     keyBoard = {
       "inline_keyboard": [
         [{
@@ -130,9 +106,6 @@ function sendComic(senderId, coverList, x, sTitle) {
         }]
       ]
     };
-
-    //echo(senderId, "X = " + x);
-
     sendPhotoKB(senderId, cover, title, keyBoard);
 
   }
@@ -146,10 +119,6 @@ function sendComic(senderId, coverList, x, sTitle) {
     cover = orgURL + "/" + cover;
     coverList[x - 1][2] = cover;
   }
-
-  //echo(senderId, "list = " + list.length);
-  //echo(senderId, "X' = " + x);
-  //echo(senderId, x == list.length); 
 
   if (x == coverList.length && coverList.length >= 6) {
     //no next page, have prev page
@@ -222,32 +191,14 @@ function sendComic(senderId, coverList, x, sTitle) {
 function comicVol(senderId, callback_data) {
 
   var volCode = callback_data;
-  //var senderId = selfid;
-
-  // var urlc = orgurl + volCode;
-  // var contentc = UrlFetchApp.fetch(urlc).getContentText();
-  // var page = UrlFetchApp.fetch(urlc);
-  // var doc = Xml.parse(page, true);
-  // var bodyHtml = doc.html.body.toXmlString();
-  // doc = XmlService.parse(bodyHtml);
-  // var root = doc.getRootElement();
   var root = urlParse(orgURL + volCode);
-
-  // var y = root.getChild("div");
-  // //Logger.log(y);
-  // var vol;
-  // vol = getBy(y, "row m-0 mt-lg-3", "class", "div");
-  // vol = getBy(vol, "col-lg-9 px-0", "class", "div");
-  // vol = getBy(vol, "comic-toc-section bg-white p-3", "class", "div");
-  // vol = vol.getChild("div").getChild("div").getChild("ol").getChildren();
   var vol = getElementsByClassName(root, "sort_div fixed-wd-num");
-  //Logger.log(vol);
-  Logger.log(vol.length);
+
+  // Logger.log(vol.length);
   var volUrlList = [];
   for (var x = 0; x < vol.length; x++) {
 
     var volUrl = vol[x].getChild("a").getAttribute("href").getValue();
-    //Logger.log(volUrl);
     var volTitle = vol[x].getChild("a").getAttribute("title").getValue();
     volUrlList.push([volUrl, volTitle]);
 
@@ -255,16 +206,13 @@ function comicVol(senderId, callback_data) {
 
   var kbNull = { "inline_keyboard": [] };
   var res = sendKB(senderId, "Please select volume⬇", kbNull); //send an empty keyboard first
-  //res = res.getContentText();
   res = JSON.parse(res.getContentText());
   var messageId = res.result.message_id;
-  Logger.log(messageId);
+  // Logger.log(messageId);
   var chatId = res.result.chat.id;
-  Logger.log(chatId);
-  Logger.log(volUrlList);
-  //var c = 1;
+  // Logger.log(chatId);
   var keyBoard = getVolKB(volUrlList, volCode, 1, messageId, chatId);
-  Logger.log(keyBoard);
+  // Logger.log(keyBoard);
   updateKB(chatId, messageId, keyBoard); //add content after
 
 }
@@ -285,14 +233,12 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
   for (; c % 10 != 0 && c < volUrlList.length; c++) {
 
     var posX = ((c - 1) % 10) % 2;
-    //var posY = (((c - 1) % 10) - (((c - 1) % 10) % 2)) / 2;
     isEnd = 0;
 
     if (c == 1 && posX != 1) {
 
       isEnd = -1;
     }
-    //Logger.log(posX + " - " + posY);
     title = volUrlList[c - 1][1];
     callBackurl = volUrlList[c - 1][0];
     var num = c;
@@ -307,7 +253,6 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
     if (posX != 1) {
       //不是右侧的
       miniKB.push(singleKey);
-      //Logger.log("left: " + singleKey);
     }
     else if (posX == 1) {
       //
@@ -387,7 +332,6 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
       "text": "Next",
       'callback_data': volCode + prefix + (c + 1).toString() + "msg" + messageId.toString() + "chat" + chatId.toString()
     }
-    //echo(selfid, volCode + prefix + (c + 1).toString() + "msg" + messageId.toString() + "chat" + chatId.toString());      
     miniKB.push(nextK);
     keyBoard.push(miniKB);
     miniKB = [];
@@ -424,7 +368,6 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
     miniKB = [];
   }
 
-  //Logger.log(keyBoard);
   var kbFinal =
   {
     "inline_keyboard": keyBoard
@@ -438,22 +381,14 @@ function quickAllPG(comicCode) {
   var currPage = 1;
   var allPG = [];
   var currURL = urlC.substr(0, urlC.length - 5) + pageFlag + currPage + urlC.substr(urlC.length - 5, urlC.length); //seperate the .html and instert info
-  Logger.log(currURL);
-
-  // var page = UrlFetchApp.fetch(currURL);
-  // var doc = Xml.parse(page, true);
-  // var bodyHtml = doc.html.body.toXmlString();
-  // var result = XmlService.parse(bodyHtml).getRootElement();
   var picElement = getElementsByClassName(urlParse(currURL), "img-fluid show-pic");
-  while(picElement.length != 0) {
+  while (picElement.length != 0) {
     var picUrl = picElement[0].getAttribute("src").getValue();
     allPG.push(picUrl);
     currPage++;
     currURL = urlC.substr(0, urlC.length - 5) + pageFlag + currPage + urlC.substr(urlC.length - 5, urlC.length); //update url
     picElement = getElementsByClassName(urlParse(currURL), "img-fluid show-pic");
   }
-  // Logger.log(allPG.length);
-  // Logger.log(allPG[22]);
   return allPG;
 }
 
@@ -462,18 +397,12 @@ function sendContent(senderId, comicCode) {
 
   var bakCode = comicCode;
   var comicCode = comicCode.substring(0, comicCode.lastIndexOf("?isend="));
-  //var fullCode = comicCode;
-  //Logger.log(comicCode);
   var isEnd = comicCode.substring((comicCode.lastIndexOf("?isend=") + 7), comicCode.indexOf("?current="));
   isEnd = parseInt(isEnd);
-  //Logger.log(isEnd);
-
   var pgURL = quickAllPG(comicCode);
-  //Logger.log(pgURL);
 
   var len = pgURL.length;
   var round = (len - (len % 10)) / 10 + Math.ceil((len % 10) / 10); //every group 10 pics, round is how many groups there will be
-  Logger.log(round);
   var photo = {};
   var photoArr = [];
   for (var x = 0; x < (round - 1); x++) {
@@ -495,12 +424,8 @@ function sendContent(senderId, comicCode) {
         media: pgURL[0]
       };
       photoArr.push(photo);
-
-      //Logger.log("Round: " + (x+1) + " URL: " + pgURL[0]);
       pgURL.shift();
     }
-    //Logger.log("Arr len: " + photoArr.length);
-    //Logger.log("Send! " + x);
     sendAlbum(senderId, photoArr);
     photoArr = [];
   }
@@ -515,17 +440,15 @@ function sendContent(senderId, comicCode) {
     caption: "第" + quickAR2CN(x) + "部分",
   };
   photoArr.push(photo);
-
-  //Logger.log("***Round: " + (x+1) + " URL: " + pgURL[0]);
   pgURL.shift();
   len = pgURL.length; //how many pics are left here
+
   for (var y = 0; y < len; y++) {
     photo = {
       type: "photo",
       media: pgURL[0]
     };
     photoArr.push(photo);
-    //Logger.log("Round: " + (x+1) + " URL: " + pgURL[0]);
     pgURL.shift();
   }
 
@@ -537,50 +460,22 @@ function sendContent(senderId, comicCode) {
 
 function endContent(senderId, comicCode) {
 
-  //var comicCode = "/manhua/9740/11879_164585.html?isend=0?current=23?max=24";
+  //  /manhua/9740/11879_164585.html?isend=0?current=23?max=24
   var senderId = senderId;
-
   var sendBackcode = comicCode.substring(0, comicCode.lastIndexOf("?isend="));
-  //Logger.log(sendBackcode);
   var fullCode = sendBackcode;
-
   var isEnd = comicCode.substring((comicCode.lastIndexOf("?isend=") + 7), comicCode.lastIndexOf("?current=")); //is it the last volume?
   isEnd = parseInt(isEnd);
-  //Logger.log(isEnd);
-
   var current = comicCode.substring((comicCode.lastIndexOf("?current=") + 9), comicCode.lastIndexOf("?max="));
   current = parseInt(current);
-  //Logger.log(current);
-
   var max = comicCode.substring((comicCode.lastIndexOf("?max=") + 5), comicCode.length); //number of last volume
   max = parseInt(max);
-  //Logger.log(max);
   var rewind = comicCode.substring(0, comicCode.lastIndexOf("/")); //back to the volume choosing page
-
-
-  //var orgurl = "https://www.manhuadb.com";
   var volCode = rewind;
-  //var senderId = selfid;
 
-  // var urlc = orgURL + volCode;
-  // Logger.log(urlc);
-  // var contentc = UrlFetchApp.fetch(urlc).getContentText();
-  // var page = UrlFetchApp.fetch(urlc);
-  // var doc = Xml.parse(page, true);
-  // var bodyHtml = doc.html.body.toXmlString();
-  // doc = XmlService.parse(bodyHtml);
-  // var root = doc.getRootElement();
   var root = urlParse(orgURL + volCode);
-  // var y = root.getChild("div");
-  // Logger.log(y);
-  // var vol;
-  // vol = getBy(y, "row m-0 mt-lg-3", "class", "div");
-  // vol = getBy(vol, "col-lg-9 px-0", "class", "div");
-  // vol = getBy(vol, "comic-toc-section bg-white p-3", "class", "div");
-  // vol = vol.getChild("div").getChild("div").getChild("ol").getChildren();
   var vol = getElementsByClassName(root, "sort_div fixed-wd-num");
   Logger.log(vol);
-  //Logger.log(vol.length);
   var nextUrl;
   var prevUrl;
 
@@ -723,23 +618,9 @@ function comicPage(senderId, callback_data) {
 
     x = parseInt(callback_data.substring(callback_data.indexOf("#") + 1, callback_data.length));
     sTitle = callback_data.substring(0, callback_data.indexOf("#"));
-    //Logger.log(pagenum);
-    //Logger.log(sTitle);
-    //echo(selfid, "CP4");
   }
 
-  // var url = orgURL + "/search?q=" + sTitle;
-  // var page = UrlFetchApp.fetch(url);
-  // var doc = Xml.parse(page, true);
-  // var bodyHtml = doc.html.body.toXmlString();
-  // doc = XmlService.parse(bodyHtml).getRootElement();
-
   doc = urlParse(orgURL + "/search?q=" + sTitle)
-
-  //echo(selfid, "CP5");
-  //var list = cList(doc);
-  //echo(selfid, list.length);
-  //echo(selfid, "CP6");
   sendComic(senderId, cList(doc), x, sTitle);
 }
 
@@ -749,41 +630,23 @@ function updateVol(senderId, callback_data) {
 
   //'callback_data': volCode + prefix + (c - 19).toString() + "msg" + messageId + "chat" + chatId
   var callback_data = callback_data;
-  // var senderId = senderId;
   var prefixPos = callback_data.indexOf("$");
-  //Logger.log(prefixPos);
   var volCode = callback_data.substring(0, prefixPos);
   var c = callback_data.substring(prefixPos + 1, callback_data.indexOf("msg"));
   c = parseInt(c);
   var messageId = parseInt(callback_data.substring(callback_data.indexOf("msg") + 3, callback_data.indexOf("chat")));
   var chatId = parseInt(callback_data.substring(callback_data.indexOf("chat") + 4, callback_data.length));
-  Logger.log(volCode + " c: " + c + " msgid: " + messageId + " chatid: " + chatId);
-  //echo(senderId, volCode + " c: " + c + " msgid: " + messageId + " chatid: " +chatId);
+  // Logger.log(volCode + " c: " + c + " msgid: " + messageId + " chatid: " + chatId);
 
-  //var orgurl = "https://www.manhuadb.com";
-  // var urlc = orgURL + volCode;
-  // //var contentc = UrlFetchApp.fetch(urlc).getContentText();    
-  // var page = UrlFetchApp.fetch(urlc);
-  // var doc = Xml.parse(page, true);
-  // var bodyHtml = doc.html.body.toXmlString();
-  // doc = XmlService.parse(bodyHtml);
-  // var root = doc.getRootElement();
   var root = urlParse(orgURL + volCode)
-  // var y = root.getChild("div");
-  // //Logger.log(y);
-  // var vol;
-  // vol = getBy(y, "row m-0 mt-lg-3", "class", "div");
-  // vol = getBy(vol, "col-lg-9 px-0", "class", "div");
-  // vol = getBy(vol, "comic-toc-section bg-white p-3", "class", "div");
-  // vol = vol.getChild("div").getChild("div").getChild("ol").getChildren();
   var vol = getElementsByClassName(root, "sort_div fixed-wd-num");
-  Logger.log(vol);
-  //Logger.log(vol.length);
+  // Logger.log(vol);
+
   var volUrlList = [];
   for (var x = 0; x < vol.length; x++) {
 
     var volUrl = vol[x].getChild("a").getAttribute("href").getValue();
-    //Logger.log(volUrl);
+    // Logger.log(volUrl);
     var volTitle = vol[x].getChild("a").getAttribute("title").getValue();
     volUrlList.push([volUrl, volTitle]);
 

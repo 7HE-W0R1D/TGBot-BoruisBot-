@@ -1,5 +1,5 @@
 function selfSupportFuncTest() {
-  Logger.log(quickAR2CN(-10));
+  //Logger.log(quickAR2CN(-10));
 }
 
 function quickAR2CN(inputNum) {
@@ -35,7 +35,7 @@ function quickAR2CN(inputNum) {
         result = chnNumChar[currDigit] + chnUnitChar[currPos] + result;
       }
     } else {
-      
+
       if (currPos == 0) {
         isPrevZero = true;
       }
@@ -44,7 +44,7 @@ function quickAR2CN(inputNum) {
         isPrevZero = true;
       }
     }
-    
+
     inputNum = Math.floor(inputNum / 10);
     currPos++;
   }
@@ -55,52 +55,6 @@ function quickAR2CN(inputNum) {
 
   return result;
 }
-
-// function AR2CN(temp) {
-//   var chnNumChar = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
-//   var chnUnitChar = ["", "十", "百", "千", "万"];
-//   var minus = "零下";
-//   var strIns = '', chnStr = '';
-//   var unitPos = 0;
-//   var isZero = false;
-//   var section = Math.abs(temp);
-
-//   while (section > 0) {
-//     var v = section % 10;
-//     if (v == 0) {
-//       if (isZero) {
-//         strIns = "";
-//         //个位数为0 不用写“零”
-//       }
-//       else {
-//         strIns = chnNumChar[v];
-//       }
-//       isZero = true;
-//       chnStr = strIns + chnStr;
-//     }
-//     else {
-//       isZero = false;
-//       if (unitPos == 1 && v == 1) {
-//         strIns = "";
-//         //十位数为1 不用写“一”
-//       }
-//       else {
-//         strIns = chnNumChar[v];
-//       }
-//       strIns += chnUnitChar[unitPos];
-//       chnStr = strIns + chnStr;
-//     }
-//     unitPos++;
-//     section = Math.floor(section / 10);
-//   }
-//   if (temp < 0) {
-//     chnStr = minus + chnStr; //加上“零下” 后期酌情加判断条件
-//   }
-//   if (temp == 0) {
-//     chnStr = chnNumChar[0];
-//   }
-//   return chnStr;
-// }
 
 function randLetter(e) {
   var str1 = "DEFGHIJKLMNOPQRSTUVWXYZ";
@@ -114,8 +68,6 @@ function randLetter(e) {
 function randNum(e)//generate numbers from 0 to e - 1;
 {
   var n = Math.floor(Math.random() * e);
-  //Logger.log(n);
-  //Logger.log(Math.random());
   return n;
 }
 
@@ -143,9 +95,8 @@ function dirEN2CN(e) {
   var cnDir = "";
 
   for (var i in engDir) {
-    //Logger.log(i);
     var dirSingle = engDir[engDir.length - i - 1];
-    //Logger.log(dirSingle);
+
     for (var k in eng) {
       if (dirSingle == eng[k]) {
         Logger.log("Found" + k);
@@ -154,7 +105,6 @@ function dirEN2CN(e) {
       }
     }
   }
-  //Logger.log(cnDir);
   return cnDir;
 }
 

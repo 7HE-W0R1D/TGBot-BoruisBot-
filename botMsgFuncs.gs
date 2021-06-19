@@ -1,5 +1,5 @@
 function botMsgFuncTest() {
-  
+
 }
 
 function sendAlbum(chatId, photourls) {
@@ -14,7 +14,6 @@ function sendAlbum(chatId, photourls) {
       //reply_markup: JSON.stringify(keyBoard)
     }
   };
-  //echo(chatId, "CP2");
   UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
 }
 
@@ -44,7 +43,6 @@ function sendPhotoKB(chatId, photourl, caption, keyBoard) {
       reply_markup: JSON.stringify(keyBoard)
     }
   };
-  //echo(chatId, "CP2");
   UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
 }
 
@@ -61,21 +59,3 @@ function updateKB(chatId, messageId, keyBoard) {
   };
   return UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
 }
-
-
-/*
-function sendAlbumKB(chatId, photourls, caption, keyBoard) {
-var data = {
-method: "post",
-payload: {
-method: "sendMediaGroup",
-chat_id: String(chatId),
-media: photourls,
-//caption: caption,
-//parse_mode: "MarkdownV2",
-//reply_markup: JSON.stringify(keyBoard)
-}
-};
-//echo(chatId, "CP2");
-UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
-}*/

@@ -1,5 +1,5 @@
 function translateTest() {
-  
+
 }
 
 function translate(e) {
