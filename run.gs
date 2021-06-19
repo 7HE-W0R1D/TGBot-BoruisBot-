@@ -48,7 +48,7 @@ function doPost(e) {
       var entityType = JSON.stringify(rawData.message.entities[x].type);
       if (entityType == '"bot_command"') {
         commandNum++;
-      } else if (entityType == '"mention') {
+      } else if (entityType == '"mention"') {
         //group chat!
         var mentionLen = rawData.message.entities[x].length;
         var mentionStat = rawData.message.entities[x].offset;
@@ -58,13 +58,12 @@ function doPost(e) {
           text = rawData.message.text.substring(rawData.message.entities[0].offset, rawData.message.entities[1].offset);
         } else {
           //calling others bots, be quiet!
-          mute == true;
+          mute = true;
         }
       }
     }
     senderId = rawData.message.chat.id;
 
-    
     if (!mute && commandNum > 0) {
 
       if (commandNum > 1) {

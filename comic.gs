@@ -2,6 +2,7 @@ function comicTest() {
   //comic(selfid, "as", 0, 0);
   //echo(selfid, "hi");
   //sendContent(selfid, "/manhua/9740/11879_164585.html?isend=0?current=23?max=24");
+  comicVol(selfid, "/manhua/703");
 }
 
 function comic(senderId, text, cmdstat, cmdlen) {
@@ -194,7 +195,10 @@ function comicVol(senderId, callback_data) {
   var root = urlParse(orgURL + volCode);
   var vol = getElementsByClassName(root, "sort_div fixed-wd-num");
 
-  // Logger.log(vol.length);
+  if (vol.length == 0) {
+    vol = getElementsByClassName(root, "sort_div");
+  }
+
   var volUrlList = [];
   for (var x = 0; x < vol.length; x++) {
 
@@ -236,7 +240,6 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
     isEnd = 0;
 
     if (c == 1 && posX != 1) {
-
       isEnd = -1;
     }
     title = volUrlList[c - 1][1];
