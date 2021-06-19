@@ -94,7 +94,7 @@ function doPost(e) {
       }
     }
   }
-  //
+  
   if (rawData.callback_query) {
     senderId = rawData.callback_query.message.chat.id;
 
