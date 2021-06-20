@@ -6,6 +6,8 @@ A telegram bot @BoruisBot running on Google Cloud Platform
 
 Start messaging [directly](t.me/boruisbot) or search @BoruisBot to start using!
 
+Add to your groups to share the comics with your friends :)
+
 ## Available Commands
 
 * ```/translate``` &emsp; translate one English word to Chinese
