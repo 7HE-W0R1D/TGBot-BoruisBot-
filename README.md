@@ -23,4 +23,4 @@ Start messaging [directly](t.me/boruisbot) or search @BoruisBot to start using!
 
 * **Added** &emsp; Added groupchat support
 
-* **Fixed** &emsp; Fixed potential errors that could cause ```/comic``` to stop
+* **Fixed** &emsp; Fixed errors that caused ```/weathernow``` to stop
