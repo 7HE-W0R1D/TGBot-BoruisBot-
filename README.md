@@ -4,7 +4,7 @@ A telegram bot @BoruisBot running on Google Cloud Platform
 
 ## Setup
 
-Start messaging [directly](t.me/boruisbot) or search @BoruisBot to start using!
+Start messaging [directly](https://t.me/boruisbot) or search @BoruisBot to start using!
 
 Add to your groups to share the comics with your friends :)
 
