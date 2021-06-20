@@ -46,6 +46,13 @@ function doPost(e) {
     var commandNum = 0;
     for (var x = 0; x < rawData.message.entities.length; x++) {
       var entityType = JSON.stringify(rawData.message.entities[x].type);
+
+      if (rawData.message.chat.id != rawData.message.from.id 
+        && rawData.message.text.indexOf("@BoruisBot") == -1) {
+        //for cases like /command@XxxBot in groupChat
+        mute = true;
+      }
+
       if (entityType == '"bot_command"') {
         commandNum++;
       } else if (entityType == '"mention"') {
@@ -61,6 +68,7 @@ function doPost(e) {
           mute = true;
         }
       }
+
     }
     senderId = rawData.message.chat.id;
 
