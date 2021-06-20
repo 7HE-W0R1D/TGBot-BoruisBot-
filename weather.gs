@@ -1,3 +1,7 @@
+function weatherTest() {
+  weather(selfid, "/weathernow beijing", "/weathernow", 0, 11);
+}
+
 function weather(senderid, text, cmd, cmdstat, cmdlen) {
   var textlen = text.length;
   // Logger.log(textlen);
@@ -64,7 +68,7 @@ function weather(senderid, text, cmd, cmdstat, cmdlen) {
 
       //温度Str
       var temp = weatherinfo.tmp;
-      var tempText = AR2CN(temp) + "摄氏度，";
+      var tempText = quickAR2CN(temp) + "摄氏度，";
 
       //降水Str
       var pcpn = weatherinfo.pcpn;
@@ -73,7 +77,7 @@ function weather(senderid, text, cmd, cmdstat, cmdlen) {
         prcp = "无降水，";
       }
       else {
-        prcp = "区域降水" + AR2CN(hum) + "毫米，";
+        prcp = "区域降水" + quickAR2CN(hum) + "毫米，";
       }
 
       //风力Str
@@ -101,7 +105,7 @@ function weather(senderid, text, cmd, cmdstat, cmdlen) {
           // Logger.log(minX + "=====" + maxX);
           windSc = minX;
         }
-        wind = windDir + AR2CN(windSc) + "级。";
+        wind = windDir + quickAR2CN(windSc) + "级。";
       }
 
       //地点+天气Str
