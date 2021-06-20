@@ -3,7 +3,7 @@ function comicTest() {
   //echo(selfid, "hi");
   //sendContent(selfid, "/manhua/9740/11879_164585.html?isend=0?current=23?max=24");
   //comicVol(selfid, "/manhua/703");
-  //sendContent(selfid, "/manhua/703/715_7653.html" + "?isend=" + "0" + "?current=" + "2" + "?max=" + "18");
+  sendContent(selfid, "/manhua/703/715_7653.html" + "?isend=" + "0" + "?current=" + "2" + "?max=" + "18");
 }
 
 function comic(senderId, text, cmdstat, cmdlen) {
@@ -433,6 +433,7 @@ function sendContent(senderId, comicCode) {
     }
     sendAlbum(senderId, photoArr);
     photoArr = [];
+    Utilities.sleep(2000);
   }
 
   //last group processed here
