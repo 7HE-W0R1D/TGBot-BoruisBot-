@@ -13,7 +13,7 @@ Add to your groups to share the comics with your friends :)
 * ```/translate``` &emsp; translate one English word to Chinese
 * ```/yiyan``` &emsp; one sentence for inspration
 * ```/weathernow``` &emsp; check weather, accepts Chinese & English
-* ```/comic``` &emsp; search & read some comics! type "/comic xxx" to start
+* ```/comic``` &emsp; [🌟featured ] search & read some comics! type "/comic xxx" to start
 
 ## Known Issues
 
