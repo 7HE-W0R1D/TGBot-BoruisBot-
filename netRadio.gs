@@ -3,47 +3,7 @@ var revTag = "#rev";
 var itemPerPage = 5;
 
 function netMusicTest() {
-  //radioSearch("ASOUL", selfid);
-  //chooseShowVol(selfid, "NRadio:list962908523");
-  //updateShowVol(selfid, "NRadio:list962908523&offset1");
-  // var fetchParameters = {};
-  //     fetchParameters.muteHttpExceptions = true;
-  // var url = "http://m7.music.126.net/20210628014032/202a734196924c07291b71a3410f95ec/ymusic/obj/w5zDlMODwrDDiGjCn8Ky/9383253787/6b90/33ce/f057/758b749f2bf551e35bf5341a8227a520.mp3";
-  // var audio = UrlFetchApp.fetch(url).getAs("audio/mpeg");
-  // Logger.log(audio.getName());
-  // sendAudio(selfid, audio, "hello");
-  // var audioId = 1850338674;
-  // var response = UrlFetchApp.fetch(cloudMusicUrl + "/song/url?id=" + audioId);
-  // response = JSON.parse(response);
-  // var sizeMB = Math.ceil(response.data[0].size / (Math.pow(1024, 2)));
-  // Logger.log(sizeMB);
-  // sendAudioLink(selfid, url, "Hi");
-  // var url1 = "NRadio:audio1855020018";
-  // var url2 = "NRadio:audio1852544927";
-  // Logger.log(url1 == url2);
-  // var keyBoard = [];
-  // var miniKB = [];
-  // var listId = 963261078;
-  // var audioId = 1855767175;
-  // getTarget(listId, audioId);
-  // var showKeys = getTarget(listId, audioId);
-  // keyBoard.push(showKeys);
-  // var returnKey = {
-  //     "text": "Return to volume choosing↩️",
-  //     'callback_data': netRadioTag + "list" + listId
-  //   }
-  // miniKB.push(returnKey);
-  // keyBoard.push(miniKB);
-  // var kbFinal =
-  // {
-  //   "inline_keyboard": keyBoard
-  // }
-  // sendKB(selfid, "Choose what to listen next⬇️", kbFinal);
-  // url = "https://netease-cloud-music-api-olog5c9nw-7he-w0r1d.vercel.app/cloudsearch?keywords=ssssssssssssiiiicjirwf&type=1009&limit=5";
-  // var response = UrlFetchApp.fetch(url);
-  // response = JSON.parse(response);
-  // Logger.log(JSON.stringify(response.result) === JSON.stringify({}));
-  // echo(selfid, encodeURIComponent("Your search did not match any radio playlists.\nTry changing your keyword."));
+
 }
 
 
