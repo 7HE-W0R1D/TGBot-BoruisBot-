@@ -14,16 +14,16 @@ Add to your groups to share the comics with your friends :)
 * ```/yiyan``` &emsp; one sentence for inspration
 * ```/weathernow``` &emsp; check weather, accepts Chinese & English
 * ```/comic``` &emsp; [🌟featured ] search & read some comics! type "/comic xxx" to start
-* ```/comic``` &emsp; [ early access ] search some netease radio playlists, add #rev at the end to show from earliest to newest
+* ```/comic``` &emsp; [ under development ] search some netease radio playlists, add #rev at the end to show from earliest to newest
 
 ## Known Issues
 
 * Slow loading when comic is over 150 pages
 
-## Changelog
+## Changelog (20210628)
 
-* **Improved** &emsp; Readability improvemt, major performance improvment
+* **Improved** &emsp; --
 
-* **Added** &emsp; Added groupchat support
+* **Added** &emsp; Added /radio command
 
-* **Fixed** &emsp; Fixed errors that caused ```/weathernow``` to stop
+* **Fixed** &emsp; --
