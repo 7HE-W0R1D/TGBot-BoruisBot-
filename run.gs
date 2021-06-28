@@ -18,8 +18,6 @@ function getUpdate() {
   Logger.log(response);
 }
 
-//------Support function here------
-
 
 //------Basic Command function here------
 function echo(id, text) {
@@ -96,6 +94,9 @@ function doPost(e) {
       else if (cmd == "/comic") {
         comic(senderId, text, cmdstat, cmdlen);
       }
+      else if (cmd == "/radio") {
+        netRadio(senderId, text, cmdstat, cmdlen);
+      }
 
       else {
         echo(senderId, "Not a valid command.");
@@ -105,29 +106,49 @@ function doPost(e) {
   
   if (rawData.callback_query) {
     senderId = rawData.callback_query.message.chat.id;
-
-    if (rawData.callback_query.data.indexOf("#") != -1) {
-      comicPage(senderId, rawData.callback_query.data)
+    if (rawData.callback_query.data == "doNothing") {
+      //do nothing here
     }
-
-    if (rawData.callback_query.data.indexOf("/manhua") != -1 && rawData.callback_query.data.indexOf("_") == -1
-      && rawData.callback_query.data.indexOf("$") == -1) {
-      //点击了一个漫画，发初始漫画集
-      comicVol(senderId, rawData.callback_query.data);
+    else if (rawData.callback_query.data.indexOf(netRadioTag) != -1) {
+      //netease radio command!
+      if (rawData.callback_query.data.indexOf("list") != -1 && rawData.callback_query.data.indexOf("offset") == -1 && rawData.callback_query.data.indexOf("audio") == -1) {
+        //send list
+        chooseShowVol(senderId, rawData.callback_query.data);
+      }
+      else if (rawData.callback_query.data.indexOf("list") != -1 && rawData.callback_query.data.indexOf("offset") != -1) {
+        //update list
+        updateShowVol(senderId, rawData);
+      }
+      else if (rawData.callback_query.data.indexOf("audio") != -1) {
+        //send radio mp3 file(or link)
+        getAudio(senderId, rawData);
+      }
     }
+    else {
+
+      if (rawData.callback_query.data.indexOf("#") != -1) {
+        comicPage(senderId, rawData.callback_query.data)
+      }
+
+      if (rawData.callback_query.data.indexOf("/manhua") != -1 && rawData.callback_query.data.indexOf("_") == -1
+        && rawData.callback_query.data.indexOf("$") == -1) {
+        //点击了一个漫画，发初始漫画集
+        comicVol(senderId, rawData.callback_query.data);
+      }
 
 
-    if (rawData.callback_query.data.indexOf("$") != -1) {
-      //更新漫画集显示
-      updateVol(senderId, rawData.callback_query.data);
+      if (rawData.callback_query.data.indexOf("$") != -1) {
+        //更新漫画集显示
+        updateVol(senderId, rawData.callback_query.data);
+
+      }
+
+      if (rawData.callback_query.data.indexOf("/manhua") != -1 && rawData.callback_query.data.indexOf("_") != -1
+        && rawData.callback_query.data.indexOf("isend") != -1) {
+        //点击了漫画的一集，准备发漫画
+        sendContent(senderId, rawData.callback_query.data);
+      }
 
     }
-
-    if (rawData.callback_query.data.indexOf("/manhua") != -1 && rawData.callback_query.data.indexOf("_") != -1
-      && rawData.callback_query.data.indexOf("isend") != -1) {
-      //点击了漫画的一集，准备发漫画
-      sendContent(senderId, rawData.callback_query.data);
-    }
-
   }
 }

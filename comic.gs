@@ -3,7 +3,7 @@ function comicTest() {
   //echo(selfid, "hi");
   //sendContent(selfid, "/manhua/9740/11879_164585.html?isend=0?current=23?max=24");
   //comicVol(selfid, "/manhua/703");
-  sendContent(selfid, "/manhua/703/715_7653.html" + "?isend=" + "0" + "?current=" + "2" + "?max=" + "18");
+  //sendContent(selfid, "/manhua/703/715_7653.html" + "?isend=" + "0" + "?current=" + "2" + "?max=" + "18");
 }
 
 function comic(senderId, text, cmdstat, cmdlen) {
@@ -74,7 +74,7 @@ function getAllFromPage(doc, target, result, comicMax) {
     var comicT = allNewResult[i].getChild("a")
     var cTitle = comicT.getAttribute("title").getValue();//  想要比我大2岁左右的这样的女友
     var cCode = comicT.getAttribute("href").getValue();  //  /manhua/24247
-    var cCover = comicT.getChild("img").getAttribute("src").getValue(); // https://media.manhuadb.com/cartoon/24247_cover_oeafwugt.jpg
+    var cCover = comicT.getChild("img").getAttribute("src").getValue();
     var info = [cTitle, cCode, cCover];
     result.push(info);
   }

@@ -6,9 +6,10 @@ function tests() {
   // Logger.log("HI");
   // Utilities.sleep(10000);
   // Logger.log("HI");
+
+  Logger.log(response);
 }
 
 // function setDevWebhook() {
-//   var response = UrlFetchApp.fetch("https://api.telegram.org/bot" + botToken + "/setWebhook?url=" + webDevURL);
-//   Logger.log(response);
+
 // }

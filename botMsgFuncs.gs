@@ -59,3 +59,33 @@ function updateKB(chatId, messageId, keyBoard) {
   };
   return UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
 }
+
+function sendAudio(chatId, audioFile, caption) {
+  var data = {
+    method: "post",
+    payload: {
+      method: "sendAudio",
+      chat_id: String(chatId),
+      audio: audioFile,
+      caption: caption,
+      //parse_mode: "MarkdownV2",
+      //reply_markup: JSON.stringify(keyBoard)
+    }
+  };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
+}
+
+function sendAudioLink(chatId, audioLink, caption) {
+  var data = {
+    method: "post",
+    payload: {
+      method: "sendAudio",
+      chat_id: String(chatId),
+      audio: String(audioLink),
+      caption: caption,
+      //parse_mode: "MarkdownV2",
+      //reply_markup: JSON.stringify(keyBoard)
+    }
+  };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + botToken + '/', data);
+}
