@@ -14,7 +14,7 @@ Add to your groups to share the comics with your friends :)
 * ```/yiyan``` &emsp; one sentence for inspration
 * ```/weathernow``` &emsp; check weather, accepts Chinese & English
 * ```/comic``` &emsp; [🌟featured ] search & read some comics! type "/comic xxx" to start
-* ```/comic``` &emsp; [ under development ] search some netease radio playlists, add #rev at the end to show from earliest to newest
+* ```/radio``` &emsp; [ under development ] search some netease radio playlists, add #rev at the end to show from earliest to newest
 
 ## Known Issues
 
