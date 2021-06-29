@@ -26,4 +26,8 @@ Add to your groups to share the comics with your friends :)
 
 * **Added** &emsp; Added /radio command
 
-* **Fixed** &emsp; --
+* **Fixed** &emsp; Fixed an issue that reserved characters in the result could stop /radio command
+
+## Credit
+
+Thanks to https://github.com/Binaryify/NeteaseCloudMusicApi for the API service in /radio command
