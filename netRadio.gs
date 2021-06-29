@@ -3,7 +3,7 @@ var revTag = "#rev";
 var itemPerPage = 5;
 
 function netMusicTest() {
-
+  netRadio(selfid, "午后", 0, 0);
 }
 
 
@@ -28,11 +28,13 @@ function netRadio(senderId, text, cmdstat, cmdlen) {
 
   for (var i = 0; i < 10 && i < response.result.djRadios.length; i++) {
     var listObj = response.result.djRadios[i]; //one radio show
-    var djName = listObj.dj.nickname; //show author name
-    var listName = listObj.name; //show name
+    var djName = stringJustify(listObj.dj.nickname); //show author name
+    var listName = stringJustify(listObj.name); //show name
     var listCover = listObj.picUrl;
     var listId = listObj.id; //show id
-    Logger.log(listCover);
+
+    Logger.log(djName);
+    Logger.log(listName);
     keyBoard = {
       "inline_keyboard": [
         [{
@@ -74,13 +76,10 @@ function updateShowVol(senderId, callback_data) {
   var response = callback_data.callback_query.data;
   var listId = response.substring(11, response.indexOf("&offset"));
   Logger.log(listId);
-  //echo(selfid, listId);
   var offSet = parseInt(response.substring(response.indexOf("&offset") + 7, response.indexOf("&rev")));
   var isRev = response.substring(response.indexOf("&rev") + 4); // &rev
   Logger.log(offSet);
-  //echo(selfid, "offset" + offSet);
   var messageId = callback_data.callback_query.message.message_id;
-  //echo(selfid, messageId);
   updateKB(senderId, messageId, showVolKB(listId, offSet, isRev));
 }
 
@@ -93,7 +92,7 @@ function showVolKB(listId, offSet, isRev) {
   for (var i = 0; i < itemPerPage && i < response.count; i++) {
     var currIndex = itemPerPage * offSet + i;
     var showObj = response.programs[currIndex];
-    var showTitle = showObj.mainSong.name;
+    var showTitle = stringJustify(showObj.mainSong.name);
     var showId = showObj.mainSong.id;
     var showDuration = showObj.mainSong.duration;
     var miniKB = [];
@@ -158,51 +157,9 @@ function getAudio(senderId, rawData) {
   var audioId = callback_data.substring(12, callback_data.indexOf("&list"));
   var listId = callback_data.substring(callback_data.indexOf("&list") + 5, callback_data.indexOf("&rev"));
   var isRev = callback_data.substring(callback_data.indexOf("&rev") + 4); // &rev
-  // echo(selfid, "audioId" + audioId);
-  // echo(selfid, "listId" + listId);
-  // echo(selfid, "isRev" + isRev);
-  // var keyBoard = rawData.callback_query.message.reply_markup.inline_keyboard;
-  // var audioName;
   var keyBoard = [];
   var miniKB = [];
-  // echo(selfid, keyBoard.length);
-  // for (var i = 0; i < keyBoard.length - 1 && i < 5; i++) {
-  //   //the last group is the nav button
-  //   echo(selfid, i);
-  //   var key = keyBoard[i];
-  //   key = key[0];
-  //   echo(selfid, key.callback_data);
-  //   echo(selfid, callback_data);
-  //   if (key.callback_data === callback_data) {
-  //     audioName = key.text;
 
-  //     echo(selfid, "AudioName: " + audioName);
-
-  //     if (i + 1 < keyBoard.length - 1) {
-  //       nextItemKey = keyBoard[i + 1];
-  //       echo(selfid, "nextItemKey: " + nextItemKey.length);
-  //       // nextItemKey = nextItemKey[0];
-  //     }
-  //     else {
-  //       //fetch the page to get the next item
-  //       thisShowId = keyBoard[5][0].callback_data.substring(11, keyBoard[5][0].callback_data.indexOf("&offset"));
-  //       nextItemKey = getTarget(keyBoard[5][0], thisShowId, 1);
-  //     }
-
-  //     if (i - 1 >= 0) {
-  //       prevItemKey = keyBoard[i - 1];
-  //       prevItemKey = prevItemKey[0];
-  //     }
-  //     else {
-  //       //fetch the page to get the prev item
-  //       thisShowId = keyBoard[5][0].callback_data.substring(11, keyBoard[5][0].callback_data.indexOf("&offset"));
-  //       prevItemKey = getTarget(keyBoard[5][0], thisShowId, -1);
-  //     }
-  //     miniKB.push(prevItemKey);
-  //     miniKB.push(nextItemKey);
-  //     break;
-  //   }
-  // }
   var showKeys = getTarget(listId, audioId, isRev);
   keyBoard.push(showKeys);
   var returnKey = {
@@ -216,26 +173,17 @@ function getAudio(senderId, rawData) {
     "inline_keyboard": keyBoard
   }
 
-  // echo(selfid, "audioReady");
   var response = UrlFetchApp.fetch(cloudMusicUrl + "/song/url?id=" + audioId);
   response = JSON.parse(response);
   var sizeMB = Math.ceil(response.data[0].size / (Math.pow(1024, 2)));
-
-  // echo(selfid, "audioSize: " + sizeMB);
   var audioLink = response.data[0].url;
-  // echo(selfid, audioLink);
   if (sizeMB >= 50) {
     //too large
     echo(senderId, "The audio file is over 50MB, by now I can only send you the link: " + audioLink);
   }
   else {
-    // var fetchParameters = {};
-    // fetchParameters.muteHttpExceptions = true;
-    // echo(selfid, "audioLink");
     var audio = UrlFetchApp.fetch(audioLink).getAs("audio/mpeg");
-    // echo(selfid, audioName);
     sendAudio(senderId, audio, "Enjoy!");
-    // sendAudioLink(senderId, audioLink, audioName);
   }
   sendKB(senderId, "Choose what to listen next⬇️", kbFinal);
 }

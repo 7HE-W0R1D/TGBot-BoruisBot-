@@ -90,7 +90,7 @@ function sendComic(senderId, coverList, x, sTitle) {
   for (; x % 5 != 0 && x < coverList.length; x++) {
     // Logger.log(x-1);
     var title = coverList[x - 1][0];
-    title = title.replace(/[\(\)\-=#*>_<~@{}\[\]\\:%!]/gi, "");
+    title = title.replace(/[\(\)\|\-=#*>_<~@{}\[\]\\:%!]/gi, "");
     var backData = coverList[x - 1][1];
     var cover = coverList[x - 1][2];
 

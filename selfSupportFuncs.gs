@@ -1,5 +1,5 @@
 function selfSupportFuncTest() {
-  //Logger.log(quickAR2CN(-10));
+  Logger.log(stringJustify("1-2`3|4..."));
 }
 
 function quickAR2CN(inputNum) {
@@ -113,4 +113,8 @@ function urlParse(inputURL) {
   var doc = Xml.parse(page, true);
   var bodyHtml = doc.html.body.toXmlString();
   return XmlService.parse(bodyHtml).getRootElement();
+}
+
+function stringJustify(inputStr) {
+  return inputStr.replace(/\|/g, "\\|").replace(/\-/g, "\\-").replace(/`/g, "\\`").replace(/\./g, "\\.").replace(/_/g, "\\_");
 }
