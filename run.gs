@@ -29,7 +29,7 @@ function echo(id, text) {
 
 //-------Main function here-------
 function doGet(e) {
-  return ContentService.createTextOutput("Fuck Google? " + JSON.stringify(e));
+  return ContentService.createTextOutput("Fuck Google " + JSON.stringify(e));
 }
 
 function doPost(e) {
@@ -111,6 +111,11 @@ function doPost(e) {
     }
     else if (rawData.callback_query.data.indexOf(netRadioTag) != -1) {
       //netease radio command!
+      if (rawData.callback_query.data.indexOf(netRadioPageTag) != -1) {
+        //new page
+        updateRadio(senderId, rawData.callback_query.data);
+      }
+
       if (rawData.callback_query.data.indexOf("list") != -1 && rawData.callback_query.data.indexOf("offset") == -1 && rawData.callback_query.data.indexOf("audio") == -1) {
         //send list
         chooseShowVol(senderId, rawData.callback_query.data);
@@ -126,18 +131,18 @@ function doPost(e) {
     }
     else {
 
-      if (rawData.callback_query.data.indexOf("#") != -1) {
+      if (rawData.callback_query.data.indexOf(comicPrefix) != -1) {
         comicPage(senderId, rawData.callback_query.data)
       }
 
       if (rawData.callback_query.data.indexOf("/manhua") != -1 && rawData.callback_query.data.indexOf("_") == -1
-        && rawData.callback_query.data.indexOf("$") == -1) {
+        && rawData.callback_query.data.indexOf(comicPagePrefix) == -1) {
         //点击了一个漫画，发初始漫画集
         comicVol(senderId, rawData.callback_query.data);
       }
 
 
-      if (rawData.callback_query.data.indexOf("$") != -1) {
+      if (rawData.callback_query.data.indexOf(comicPagePrefix) != -1) {
         //更新漫画集显示
         updateVol(senderId, rawData.callback_query.data);
 

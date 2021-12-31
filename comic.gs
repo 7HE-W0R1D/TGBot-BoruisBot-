@@ -1,3 +1,6 @@
+var comicPrefix = "#comic";
+var comicPagePrefix = "$comic";
+
 function comicTest() {
   //comic(selfid, "as", 0, 0);
   //echo(selfid, "hi");
@@ -84,7 +87,7 @@ function getAllFromPage(doc, target, result, comicMax) {
 function sendComic(senderId, coverList, x, sTitle) {
   //x is the current comic's index (starting from 1)
 
-  var prefix = "#";
+  var prefix = comicPrefix;
   var keyBoard = {};
 
   for (; x % 5 != 0 && x < coverList.length; x++) {
@@ -226,7 +229,7 @@ function getVolKB(volUrlList, volCode, c, messageId, chatId) {
 
   var title;
   var callBackurl; //  /manhua/703/715_7653.html
-  var prefix = "$";
+  var prefix = comicPagePrefix;
   var keyBoard = [];
   var miniKB = [];
 
@@ -620,10 +623,10 @@ function comicPage(senderId, callback_data) {
   //var orgurl = "https://www.manhuadb.com/search?q=";
   //echo(selfid, "CP3");
 
-  if (callback_data.indexOf("#") != -1) {
+  if (callback_data.indexOf(comicPrefix) != -1) {
 
-    x = parseInt(callback_data.substring(callback_data.indexOf("#") + 1, callback_data.length));
-    sTitle = callback_data.substring(0, callback_data.indexOf("#"));
+    x = parseInt(callback_data.substring(callback_data.indexOf(comicPrefix) + 1, callback_data.length));
+    sTitle = callback_data.substring(0, callback_data.indexOf(comicPrefix));
   }
 
   doc = urlParse(orgURL + "/search?q=" + sTitle)
@@ -636,7 +639,7 @@ function updateVol(senderId, callback_data) {
 
   //'callback_data': volCode + prefix + (c - 19).toString() + "msg" + messageId + "chat" + chatId
   var callback_data = callback_data;
-  var prefixPos = callback_data.indexOf("$");
+  var prefixPos = callback_data.indexOf(comicPagePrefix);
   var volCode = callback_data.substring(0, prefixPos);
   var c = callback_data.substring(prefixPos + 1, callback_data.indexOf("msg"));
   c = parseInt(c);
