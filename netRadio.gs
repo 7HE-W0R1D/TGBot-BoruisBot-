@@ -13,6 +13,7 @@ function netMusicTest() {
   // updateRadio(selfid, netRadioTag + netRadioPageTag + "?page=1&keyWord=乃琳&maxPage=1");
   // updateRadio(selfid, "#NRadio$NRadio?page=0&keyWord=午后&maxPage=1");
   // showVolKB(959453342, 0);
+  // sendKB(selfid, "Please select volume⬇", showVolKB(347336216, 2));
 }
 
 
@@ -40,7 +41,7 @@ function netRadio(senderId, text, cmdstat, cmdlen) {
       "inline_keyboard": [
         [{
           "text": "Find out more⬆",
-          'callback_data': netRadioTag + "list" + listId
+          'callback_data': netRadioTag + "&list=" + listId
         }]
       ]
     };
@@ -92,7 +93,7 @@ function updateRadio(senderId, data) {
       "inline_keyboard": [
         [{
           "text": "Find out more⬆",
-          'callback_data': netRadioTag + "list" + listId
+          'callback_data': netRadioTag + "?list=" + listId
         }]
       ]
     };
@@ -148,7 +149,7 @@ function search(keyWord, type) {
 
 function chooseShowVol(senderId, callback_data) {
   //first time, we send a new keyboard and update it
-  var listId = callback_data.substring(netRadioTag.length + 4, callback_data.length);
+  var listId = callback_data.substring(netRadioTag.length + 6, callback_data.length);
   Logger.log(listId);
 
   var kbNull = { "inline_keyboard": [] };
@@ -156,6 +157,7 @@ function chooseShowVol(senderId, callback_data) {
   res = JSON.parse(res.getContentText());
   var messageId = res.result.message_id;
   var chatId = res.result.chat.id;
+  // echo(selfid, listId);
 
   updateKB(chatId, messageId, showVolKB(listId, 0));
 }
@@ -164,9 +166,9 @@ function updateShowVol(senderId, callback_data) {
   //update the existing keyboard, note that this callback data is different from the above one
   //this callback_data.callback_query.data = the above callback_data
   var response = callback_data.callback_query.data;
-  var listId = response.substring(netRadioTag.length + 4, response.indexOf("&offset"));
+  var listId = response.substring(netRadioTag.length + 6, response.indexOf("&offset="));
   Logger.log(listId);
-  var offSet = parseInt(response.substring(response.indexOf("&offset") + 7, response.length));
+  var offSet = parseInt(response.substring(response.indexOf("&offset=") + 8, response.length));
   Logger.log(offSet);
   var messageId = callback_data.callback_query.message.message_id;
   updateKB(senderId, messageId, showVolKB(listId, offSet));
@@ -178,19 +180,20 @@ function showVolKB(listId, offSet) {
   response = JSON.parse(response);
   var keyBoard = [];
 
-  for (var i = 0; i < itemPerPage && i < response.count; i++) {
+  for (var i = 0; i < itemPerPage && (itemPerPage * offSet + i) < response.count; i++) {
     var currIndex = itemPerPage * offSet + i;
     var showObj = response.programs[currIndex];
-    var showTitle = (showObj.mainSong.name);
+    var showTitle = showObj.mainSong.name;
     var showId = showObj.mainSong.id;
     var showDuration = showObj.mainSong.duration;
     var miniKB = [];
     var showKey = {
       "text": showTitle + " " + Math.round(showDuration / 60000) + "min",
-      'callback_data': netRadioTag + "audio" + showId.toString() + "&list" + listId.toString()
+      'callback_data': netRadioTag + "?audio=" + showId.toString() + "&list=" + listId.toString()
     }
     miniKB.push(showKey);
     Logger.log(showTitle + " " + Math.round(showDuration / 60000) + "min");
+    Logger.log(netRadioTag + "?audio=" + showId.toString() + "&list=" + listId.toString());
     keyBoard.push(miniKB);
   }
   //pushing nav buttons
@@ -202,7 +205,7 @@ function showVolKB(listId, offSet) {
       //have previous page
       var navKey = {
         "text": "Prev⬅️",
-        'callback_data': netRadioTag + "list" + listId + "&offset" + (offSet - 1)
+        'callback_data': netRadioTag + "?list=" + listId + "&offset=" + (offSet - 1)
       }
       navKeys.push(navKey);
     }
@@ -211,12 +214,12 @@ function showVolKB(listId, offSet) {
       //have pervious
       var prevKey = {
         "text": "Prev⬅️",
-        'callback_data': netRadioTag + "list" + listId + "&offset" + (offSet - 1)
+        'callback_data': netRadioTag + "?list=" + listId + "&offset=" + (offSet - 1)
       }
       navKeys.push(prevKey);
       var nextKey = {
         "text": "Next➡️",
-        'callback_data': netRadioTag + "list" + listId + "&offset" + (offSet + 1)
+        'callback_data': netRadioTag + "?list=" + listId + "&offset=" + (offSet + 1)
       }
       navKeys.push(nextKey);
     }
@@ -227,7 +230,7 @@ function showVolKB(listId, offSet) {
       //has next
       var nextKey = {
         "text": "Next➡️",
-        'callback_data': netRadioTag + "list" + listId + "&offset" + (offSet + 1)
+        'callback_data': netRadioTag + "?list=" + listId + "&offset=" + (offSet + 1)
       }
       navKeys.push(nextKey);
     }
@@ -243,16 +246,16 @@ function showVolKB(listId, offSet) {
 
 function getAudio(senderId, rawData) {
   var callback_data = rawData.callback_query.data;
-  var audioId = callback_data.substring(12, callback_data.indexOf("&list"));
-  var listId = callback_data.substring(callback_data.indexOf("&list") + 5, callback_data.length);
+  var audioId = callback_data.substring(netRadioTag.length + 7, callback_data.indexOf("&list="));
+  var listId = callback_data.substring(callback_data.indexOf("&list=") + 6, callback_data.length);
   var keyBoard = [];
   var miniKB = [];
-
-  var showKeys = getTarget(listId, audioId);
+  var dataLoad = getTarget(listId, audioId);
+  var showKeys = dataLoad[0];
   keyBoard.push(showKeys);
   var returnKey = {
     "text": "Return to volume choosing↩️",
-    'callback_data': netRadioTag + "list" + listId
+    'callback_data': netRadioTag + "?list=" + listId
   }
   miniKB.push(returnKey);
   keyBoard.push(miniKB);
@@ -270,8 +273,12 @@ function getAudio(senderId, rawData) {
     echo(senderId, "The audio file is over 50MB, by now I can only send you the link: " + audioLink);
   }
   else {
-    var audio = UrlFetchApp.fetch(audioLink).getAs("audio/mpeg");
-    sendAudio(senderId, audio, "Enjoy!");
+    // var audio = UrlFetchApp.fetch(audioLink).getAs("audio/mpeg");
+    // name = audio.getName();
+    // audiosuffix = name.substring(name.lastIndexOf("."), name.length);
+    // audio.setName(dataLoad[1] + audiosuffix);
+    // echo(selfid, dataLoad[1] + audiosuffix)
+    sendAudioCN(senderId, audioLink, dataLoad[1]);
   }
   sendKB(senderId, "Choose what to listen next⬇️", kbFinal);
 }
@@ -293,6 +300,8 @@ function getTarget(listId, findId) {
     // echo(selfid, "findid: " + findId);
     if (showId == findId) {
       // echo(selfid, "found!");
+      currObj = response.programs[currIndex];
+      currTitle = currObj.mainSong.name;
       if (response.programs.length == 1) {
         //only one show,
         targetPrevKey = {
@@ -317,7 +326,7 @@ function getTarget(listId, findId) {
         targetDuration = targetObj.mainSong.duration;
         targetNextKey = {
           "text": "Next⏭️ " + targetTitle + " " + Math.round(targetDuration / 60000) + "min",
-          'callback_data': netRadioTag + "audio" + targetId.toString() + "&list" + listId
+          'callback_data': netRadioTag + "?audio=" + targetId.toString() + "&list=" + listId
         }
         miniKB.push(targetPrevKey);
         miniKB.push(targetNextKey);
@@ -333,7 +342,7 @@ function getTarget(listId, findId) {
         targetDuration = targetObj.mainSong.duration;
         targetPrevKey = {
           "text": "Prev⏮️ " + targetTitle + " " + Math.round(targetDuration / 60000) + "min",
-          'callback_data': netRadioTag + "audio" + targetId.toString() + "&list" + listId
+          'callback_data': netRadioTag + "?audio=" + targetId.toString() + "&list=" + listId
         }
         targetNextKey = {
           "text": "No following songs available",
@@ -352,7 +361,7 @@ function getTarget(listId, findId) {
         targetDuration = targetObj.mainSong.duration;
         targetPrevKey = {
           "text": "Prev⏮️ " + targetTitle + " " + Math.round(targetDuration / 60000) + "min",
-          'callback_data': netRadioTag + "audio" + targetId.toString() + "&list" + listId
+          'callback_data': netRadioTag + "?audio=" + targetId.toString() + "&list=" + listId
         }
         // echo(selfid, targetPrevKey.text);
         targetObj = response.programs[currIndex + 1];
@@ -361,7 +370,7 @@ function getTarget(listId, findId) {
         targetDuration = targetObj.mainSong.duration;
         targetNextKey = {
           "text": "Next⏭️ " + targetTitle + " " + Math.round(targetDuration / 60000) + "min",
-          'callback_data': netRadioTag + "audio" + targetId.toString() + "&list" + listId
+          'callback_data': netRadioTag + "?audio=" + targetId.toString() + "&list=" + listId
         }
         // echo(selfid, targetNextKey.text);
         miniKB.push(targetPrevKey);
@@ -372,5 +381,5 @@ function getTarget(listId, findId) {
       }
     }
   }
-  return miniKB;
+  return [miniKB, currTitle];
 }
